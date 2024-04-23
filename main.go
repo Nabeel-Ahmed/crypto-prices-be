@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type CryptoResponse struct {
@@ -18,6 +20,15 @@ type CryptoResponse struct {
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	coinGeckoAPIKey := os.Getenv("COIN_GECKO_API_KEY")
+
+	println(coinGeckoAPIKey)
+
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest", nil)
 	if err != nil {
@@ -31,7 +42,7 @@ func main() {
 	q.Add("convert", "USD")
 
 	req.Header.Set("Accepts", "application/json")
-	req.Header.Add("X-CMC_PRO_API_KEY", "b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c")
+	req.Header.Add("X-CMC_PRO_API_KEY", coinGeckoAPIKey)
 	req.URL.RawQuery = q.Encode()
 
 	resp, err := client.Do(req)
