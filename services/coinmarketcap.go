@@ -19,7 +19,7 @@ func CoinMarketCapService(c *gin.Context, requestType string, endpoint string,) 
 
 	coinMarketCapAPIKey := os.Getenv("COIN_MARKET_CAP_API_KEY")
 
-	url := fmt.Sprintf("https://sandbox-api.coinmarketcap.com/%s", endpoint)
+	url := fmt.Sprintf("https://pro-api.coinmarketcap.com/%s", endpoint)
 
 	req, err := http.NewRequest(requestType, url, nil)
 	if err != nil {
