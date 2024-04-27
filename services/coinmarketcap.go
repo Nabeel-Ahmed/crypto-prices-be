@@ -1,18 +1,17 @@
-package routes
+package services
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
-	"encoding/json"
-
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
-func getListings(c *gin.Context) {
+func CoinMarketCapService(c *gin.Context, requestType string, endpoint string,) {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -20,14 +19,12 @@ func getListings(c *gin.Context) {
 
 	coinMarketCapAPIKey := os.Getenv("COIN_MARKET_CAP_API_KEY")
 
-	println(coinMarketCapAPIKey)
+	url := fmt.Sprintf("https://sandbox-api.coinmarketcap.com/%s", endpoint)
 
-	req, err := http.NewRequest("GET", "https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest", nil)
+	req, err := http.NewRequest(requestType, url, nil)
 	if err != nil {
 		log.Fatalln(err)
 	}
-
-	fmt.Println(coinMarketCapAPIKey, "should be here")
 
 	req.Header.Set("Accepts", "application/json")
 	req.Header.Add("X-CMC_PRO_API_KEY", coinMarketCapAPIKey)
